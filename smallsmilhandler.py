@@ -4,52 +4,52 @@
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 
+
 class SmallSMILHandler(ContentHandler):
 
-    # Clase para archivos Smill
-    def __init__ (self):
-        
+    def __init__(self):
+
         self.List = []
-        self.root_layout = {}
+        self.root = {}
         self.region = {}
         self.img = {}
         self.audio = {}
         self.textstream = {}
 
     def startElement(self, name, attrs):
-    # Abrir etiquetas
-        if name == 'root_layout':
-            self.root_layout['width'] = attrs.get("width","") 
-            self.root_layout['height'] = attrs.get("height","")
-            self.root_layout['background-color'] = attrs.get("background-color","") 
-            self.List.append([name, self.root_layout])
-            
 
-        if name == 'region':
+        if name == 'root_layout':
+            self.root['width'] = attrs.get('width', "")
+            self.root['height'] = attrs.get('height', "")
+            self.root['background-color'] = attrs.get('background-color', "")
+            self.List.append([name, self.root])
+            self.root = {}
+        elif name == 'region':
             self.region['id'] = attrs.get('id', "")
             self.region['top'] = attrs.get('top', "")
             self.region['bottom'] = attrs.get('bottom', "")
             self.region['left'] = attrs.get('left', "")
             self.region['right'] = attrs.get('right', "")
             self.List.append([name, self.region])
-
-        if name == 'img':
-            self.img['src'] = attrs.get("src","") 
-            self.img['region'] = attrs.get("region","")
-            self.img['begin'] = attrs.get("begin","") 
-            self.img['dur'] = attrs.get("dur","")
+            self.region = {}
+        elif name == 'img':
+            self.img['src'] = attrs.get("src", "")
+            self.img['region'] = attrs.get("region", "")
+            self.img['begin'] = attrs.get("begin", "")
+            self.img['dur'] = attrs.get("dur", "")
             self.List.append([name, self.img])
-
-        if name == 'audio':
+            self.img = {}
+        elif name == 'audio':
             self.audio['src'] = attrs.get('src', "")
             self.audio['begin'] = attrs.get('begin', "")
             self.audio['dur'] = attrs.get('dur', "")
             self.List.append([name, self.audio])
-
-        if name == 'textstream':
+            self.audio = {}
+        elif name == 'textstream':
             self.textstream['src'] = attrs.get('src', "")
             self.textstream['region'] = attrs.get('region', "")
             self.List.append([name, self.textstream])
+            self.textsream = {}
 
     def get_tags(self):
         return self.List
