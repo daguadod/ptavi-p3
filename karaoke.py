@@ -13,11 +13,14 @@ class KaraokeLocal:
 
     def __init__(self, file):
 
-        parser = make_parser()
-        sHandler = SmallSMILHandler()
-        parser.setContentHandler(sHandler)
-        parser.parse(open(file))
-        self.lista = sHandler.get_tags()
+        try:
+            parser = make_parser()
+            sHandler = SmallSMILHandler()
+            parser.setContentHandler(sHandler)
+            parser.parse(open(file))
+            self.lista = sHandler.get_tags()
+        except FileNotFoundError:
+            sys.exit('File Not Found')
 
     def __str__(self):
 
