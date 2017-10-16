@@ -3,6 +3,7 @@
 
 import sys
 import json
+import urllib.request
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 from smallsmilhandler  import SmallSMILHandler
@@ -17,6 +18,7 @@ if __name__ == "__main__":
         parser.parse(open(file))
         lista = sHandler.get_tags()
         exit = ''
+
         for etiqueta in lista:
             names = etiqueta[0]
             valores = etiqueta[1]
@@ -24,13 +26,22 @@ if __name__ == "__main__":
             for attrs in valores:
                 if valores[attrs] != '': 
                     atributos += '\t' + attrs + '="' + valores[attrs] + '"'
+                    if attrs == 'src':
+                        try:
+                            text = files.read()
+                            url = valores[attrs].split('/')    
+                            url.reverse()
+                            urllib.request.urlretrieve(valores[attrs], url[0])
+                            text.replace(valores[attrs], url[0])
+                        except ValueError:
+                            pass
             exit += names + atributos + '\n'
         print(exit)
 
         file = file.replace('.smil', '.json')
         with open(file, 'w') as outfile_json:
-            json.dump(sHandler.get_tags(), outfile_json, indent=3, separators=(' ',
-            ': '))
+            json.dump(sHandler.get_tags(), outfile_json, indent=3, 
+            separators=(' ', ': '))
             
     except IndexError: 
             sys.exit('Usage python3 karaoke.p file.smil')
