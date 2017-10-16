@@ -8,10 +8,11 @@ from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 from smallsmilhandler import SmallSMILHandler
 
+
 class KaraokeLocal:
 
     def __init__(self, file):
-        
+
         parser = make_parser()
         sHandler = SmallSMILHandler()
         parser.setContentHandler(sHandler)
@@ -34,11 +35,10 @@ class KaraokeLocal:
 
     def to_json(self, fileSmil, fileJson=None):
 
-        if fileJson == None:
+        if fileJson is None:
             fileJson = fileSmil.replace('.smil', '.json')
         with open(fileJson, 'w') as outfile_json:
-            json.dump(self.lista, outfile_json, indent=3, 
-            separators=(' ', ': '))
+            json.dump(self.lista, outfile_json, indent=3)
 
     def do_local(self):
 
@@ -50,15 +50,14 @@ class KaraokeLocal:
                         url = valor[attrs].split('/')
                         urllib.request.urlretrieve(valor[attrs], url[-1])
                         valor[attrs] = url[-1]
-                    except ValueError: 
+                    except ValueError:
                         pass
-            
 
 if __name__ == "__main__":
 
     try:
         file = sys.argv[1]
-    except IndexError: 
+    except IndexError:
             sys.exit('Usage python3 karaoke.p file.smil')
     karaoke = KaraokeLocal(file)
     print(karaoke)
